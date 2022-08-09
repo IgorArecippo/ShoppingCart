@@ -7,10 +7,11 @@ const fetchProducts = async (product) => {
   const link = produto(product);
   const resposta = await fetch(link);
   const results = await (resposta.json());
-    console.log(results);
+    // console.log(results);
   return results;
 };
 fetchProducts('computador');
+
 if (typeof module !== 'undefined') {
   module.exports = {
     fetchProducts,
