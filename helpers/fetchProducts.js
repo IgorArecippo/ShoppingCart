@@ -17,4 +17,4 @@ if (typeof module !== 'undefined') {
     fetchProducts,
   };
 }
-fetchProducts('computador');
+// fetchProducts('computador');

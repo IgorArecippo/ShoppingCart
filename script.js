@@ -1,5 +1,7 @@
 // const { fetchProducts } = require('./helpers/fetchProducts');
 
+// const { fetchItem } = require("./helpers/fetchItem");
+
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -40,6 +42,12 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
   return li;
 };
 
+const showCartItems = async () => {
+  const it = await fetchItem();
+  const cartItems = document.querySelector('.cart__items');
+  cartItems.appendChild(createCartItemElement({ sku: it.id, name: it.title, salePrice: it.price }));
+};
+
 const showProducts = async () => {
   const produtos = await fetchProducts('computador');
   const itens = document.querySelector('.items');
@@ -51,4 +59,5 @@ const showProducts = async () => {
 
 window.onload = () => {
   showProducts();
+  showCartItems();
 };
