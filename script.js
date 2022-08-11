@@ -2,6 +2,8 @@
 
 // const { fetchItem } = require("./helpers/fetchItem");
 
+// const { fetchItem } = require("./helpers/fetchItem");
+
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -16,22 +18,10 @@ const createCustomElement = (element, className, innerText) => {
   return e;
 };
 
-const createProductItemElement = ({ sku, name, image }) => {
-  const section = document.createElement('section');
-  section.className = 'item';
-
-  section.appendChild(createCustomElement('span', 'item__sku', sku));
-  section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createProductImageElement(image));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-
-  return section;
-};
-
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
 const cartItemClickListener = (event) => {
-  // coloque seu código aqui
+  event.target.remove();
 };
 
 const createCartItemElement = ({ sku, name, salePrice }) => {
@@ -42,10 +32,25 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
   return li;
 };
 
-const showCartItems = async () => {
-  const it = await fetchItem();
-  const cartItems = document.querySelector('.cart__items');
-  cartItems.appendChild(createCartItemElement({ sku: it.id, name: it.title, salePrice: it.price }));
+const createProductItemElement = ({ sku, name, image }) => {
+  const section = document.createElement('section');
+  section.className = 'item';
+
+  section.appendChild(createCustomElement('span', 'item__sku', sku));
+  section.appendChild(createCustomElement('span', 'item__title', name));
+  section.appendChild(createProductImageElement(image));
+  const btn = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
+  btn.addEventListener('click', async () => {
+    const item = await fetchItem(sku);
+    const { id, title, price } = item;
+    const destructured = { sku: id, name: title, salePrice: price };
+    const create = createCartItemElement(destructured);
+    const itens = document.querySelector('.cart__items');
+    itens.appendChild(create);
+  });
+  section.appendChild(btn);
+
+  return section;
 };
 
 const showProducts = async () => {
@@ -59,5 +64,4 @@ const showProducts = async () => {
 
 window.onload = () => {
   showProducts();
-  showCartItems();
 };
